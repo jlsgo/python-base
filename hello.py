@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 """Hello World Multi Linguas.
 
 Dependendo da lingua configurada no ambiente 
@@ -34,7 +34,7 @@ elif current_language == "es_SP":
     msg = "Holla, Mundo!"
 elif current_language == "fr_FR":
     msg = "Bonjour, Monde!"
-
+    
 print(msg)  
 
 
