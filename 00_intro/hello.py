@@ -21,7 +21,7 @@ Execução:
     ./hello.py
 """
 __version__ = "0.1.3"
-__author__ = "Bruno Rocha"
+__author__ = "Jhon"
 __license__ = "Unlicense"
 
 import logging

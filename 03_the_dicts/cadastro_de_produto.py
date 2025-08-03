@@ -17,7 +17,7 @@ produto = {
     "codebar": None,
 }
 
-cliente = {"nome": "Bruno"}
+cliente = {"nome": "jhon"}
 
 compra = {"cliente": cliente, "produto": produto, "quantidade": 3}
 
