@@ -22,7 +22,7 @@ __license__ = "Unlicense"
 
 import os 
 import sys 
-
+    
 arguments = { "lang":"None","count": "1",}
 for arg in sys.argv[1:]:
     # TODO: tratar ValueError
@@ -36,7 +36,7 @@ for arg in sys.argv[1:]:
 
 
 current_language = arguments["lang"]
-if current_language is None:
+if current_language  == "None":
     if "LANG" in os.environ:
         current_language = os.environ["LANG"]
     else:
@@ -65,6 +65,7 @@ msg = {
     "fi_FI": "Hei, maailma!",
     "pl_PL": "Witaj, świecie!",
 } 
+
 
 
 print(msg[current_language] * int(arguments["count"]))

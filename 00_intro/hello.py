@@ -1,77 +1,44 @@
 #!/usr/bin/env python3
 """Hello World Multi Linguas.
 
-Dependendo da lingua configurada no ambiente o programa exibe a mensagem
-correspondente.
+Depending on the language configured in the environment, the program displays the
+corresponding message.
 
-Como usar:
+How to use:
 
-Tenha a variável LANG devidamente configurada ex:
+Set the LANG environment variable, e.g.:
 
     export LANG=pt_BR
 
-Ou informe atraves do CLI argument `--lang`
+Or provide it via the --lang CLI argument.
 
-Ou o usuário terá que digitar.
+Or the user will be prompted to enter it.
 
-Execução:
+Execution:
 
     python3 hello.py
     ou
     ./hello.py
 """
 __version__ = "0.1.3"
-__author__ = "Jhon"
+__author__ = "Jhon Gonçalves"
 __license__ = "Unlicense"
 
+import argparse
 import logging
 import os
 import sys
 
-log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
-log = logging.Logger("bruno", log_level)
-ch = logging.StreamHandler()
-ch.setLevel(log_level)
-fmt = logging.Formatter(
-    "%(asctime)s  %(name)s  %(levelname)s " "l:%(lineno)d f:%(filename)s: %(message)s"
+# Configure logging
+logging.basicConfig(
+    level=os.getenv("LOG_LEVEL", "WARNING").upper(),
+    format="%(asctime)s %(name)s %(levelname)s l:%(lineno)d f:%(filename)s: %(message)s",
 )
-ch.setFormatter(fmt)
-log.addHandler(ch)
+log = logging.getLogger(__name__)
 
-arguments = {"lang": None, "count": 1}
 
-for arg in sys.argv[1:]:
-    try:
-        key, value = arg.split("=")
-    except ValueError as e:
-        log.error(
-            "You need to use `=`, you passed %s, try --key=value: %s",
-            arg,
-            str(e),
-        )
-        sys.exit(1)
-
-    key = key.lstrip("-").strip()
-    value = value.strip()
-
-    # Validação
-    if key not in arguments:
-        print(f"Invalid Option `{key}`")
-        sys.exit()
-
-    arguments[key] = value
-
-current_language = arguments["lang"]
-
-if current_language is None:
-    if "LANG" in os.environ:
-        current_language = os.getenv("LANG")
-    else:
-        current_language = input("Choose a language:")
-
-current_language = current_language[:5]
-
-msg = {
+# Message translations
+MESSAGES = {
     "en_US": "Hello, World!",
     "pt_BR": "Olá, Mundo!",
     "it_IT": "Ciao, Mondo!",
@@ -79,18 +46,34 @@ msg = {
     "fr_FR": "Bonjour, Monde!",
 }
 
+def main():
+    """Main function to run the script."""
+    parser = argparse.ArgumentParser(
+        description="Prints 'Hello, World!' in different languages."
+    )
+    parser.add_argument(
+        "--lang",
+        metavar="LANGUAGE",
+        help="The language to use (e.g., pt_BR, en_US)",
+        default=None,
+    )
+    parser.add_argument(
+        "--count",
+        metavar="N",
+        type=int,
+        help="Number of times to print the message",
+        default=1,
+    )
+    args = parser.parse_args()
 
-"""
-# try com valor default
-message = msg.get(current_language, msg["en_US"])
-"""
+    # Determine language with precedence: CLI > ENV > Input
+    current_language = args.lang or os.getenv("LANG") or input("Choose a language: ")
+    current_language = current_language.split(".")[0]
 
-# EAFP
-try:
-    message = msg[current_language]
-except KeyError as e:
-    print(f"[ERROR] {str(e)}")
-    print(f"Language is invalid, choose from: {list(msg.keys())}")
-    sys.exit(1)
+    # Safely get the message with a fallback to English
+    message = MESSAGES.get(current_language, MESSAGES["en_US"])
 
-print(message * int(arguments["count"]))
+    print(message * args.count)
+
+if __name__ == "__main__":
+    main()
