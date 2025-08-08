@@ -66,7 +66,4 @@ msg = {
     "pl_PL": "Witaj, świecie!",
 } 
 
-
-
-
 print(msg[current_language] * int(arguments["count"]))
